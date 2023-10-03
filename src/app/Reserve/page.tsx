@@ -10,8 +10,7 @@ export default function Reserve() {
   const cancelButtonRef = useRef(null)
 
   const click_reserve = (event: React.MouseEvent<HTMLButtonElement>) => {
-    //setOpen(true);
-
+    setOpen(true);
 
     event.currentTarget.classList.toggle('transition');
     event.currentTarget.classList.toggle('hover:duration-300');
@@ -22,8 +21,10 @@ export default function Reserve() {
     event.currentTarget.classList.toggle('bg-red-900');
     event.currentTarget.classList.toggle('text-white');
 
-    var tag_p = event.currentTarget.querySelector('p');
-    //console.log(event.currentTarget)
+    let tex: string = "ไม่ว่าง";
+    let t: HTMLParagraphElement | null = event.currentTarget.querySelector('p');
+    t?.innerText(tex);
+    //console.log(event.currentTarget) 
 
 
   }
