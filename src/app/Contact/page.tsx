@@ -1,5 +1,5 @@
 
-export default function Map() {
+export default function Contact() {
   return (
     <>
       <div className="w-100 relative text-center">
@@ -12,10 +12,13 @@ export default function Map() {
       </div>
       <div className="container mx-auto mb-44">
 
-        <div className="text-3xl font-bold my-10 text-black text-center sm:text-left">
-          โทรศัพท์
+        <div className="text-3xl font-bold mt-10 my-5 text-black text-center sm:text-left">
+          ติดต่อ
         </div>
 
+        <div className="text-xl my-8 text-black text-center sm:text-left">ชื่อ - นามสกุล : นาย สุเทพ ศรีบุญเจริญ (เจ้าของกิจการ) </div>
+        <div className="text-xl my-8 text-black text-center sm:text-left">โทรศัพท์ : 083-1111-627 </div>
+        <div className="text-xl my-8 text-black text-center sm:text-left">ที่อยู่ : 46/4 หมู่4 ตำบลเทพราช อำเภอบ้านโพธิ์ จังหวัดฉะเชิงเทรา</div>
 
       </div>
     </>

@@ -1,5 +1,5 @@
 
-export default function Map() {
+export default function Payment() {
   return (
     <>
       <div className="w-100 relative text-center">

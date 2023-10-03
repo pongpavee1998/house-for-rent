@@ -1,46 +1,142 @@
 'use client'
-import { HomeIcon } from '@heroicons/react/24/solid'
+import { HomeIcon, ExclamationTriangleIcon } from '@heroicons/react/24/solid'
+import { Fragment, useRef, useState, useCallback, MouseEventHandler } from 'react'
+import { Dialog, Transition } from '@headlessui/react'
 
-function Cards() {
-  let html = [];
-  for (let i = 0; i < 60; i++) {
-    if (i % 17 == 0 || i % 27 == 0) {
-      html.push(
-        <div key={i} className="rounded overflow-hidden shadow-xl mb-2 bg-red-900">
-          <div className="px-6 py-4 text-center ">
-            <div className='flex justify-center items-center'><HomeIcon className="h-6 w-6 text-white" /></div>
-            <div className="font-bold text-xl text-white my-3">
-              {101 + i}
-            </div>
-            <p className="text-white text-base">
-              ไม่ว่าง
-            </p>
-          </div>
-        </div>)
-    }
-    else {
-      html.push(
-        <div key={i} className="rounded overflow-hidden shadow-xl transition hover:duration-300 hover:scale-105 mb-2 bg-gray-100">
-          <div className="px-6 py-4 text-center ">
-            <div className='flex justify-center items-center'><HomeIcon className="h-6 w-6 text-gray-800" /></div>
-            <div className="font-bold text-xl text-gray-800 my-3">
-              {101 + i}
-            </div>
-            <p className="text-gray-600 text-base">
-              ห้องว่าง
-            </p>
-          </div>
-        </div>)
-    }
+export default function Reserve() {
+  const imgs: number[] = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+
+  const [open, setOpen] = useState(false)
+  const cancelButtonRef = useRef(null)
+
+  const click_reserve = (event: React.MouseEvent<HTMLButtonElement>) => {
+    //setOpen(true);
+
+
+    event.currentTarget.classList.toggle('transition');
+    event.currentTarget.classList.toggle('hover:duration-300');
+    event.currentTarget.classList.toggle('hover:scale-105');
+    event.currentTarget.classList.toggle('bg-gray-100');
+    event.currentTarget.classList.toggle('text-gray-800');
+
+    event.currentTarget.classList.toggle('bg-red-900');
+    event.currentTarget.classList.toggle('text-white');
+
+    var tag_p = event.currentTarget.querySelector('p');
+    //console.log(event.currentTarget)
+
+
   }
 
-  return html;
-}
+  const Modal = () => {
+    return (
+      <Transition.Root show={open} as={Fragment}>
+        <Dialog as="div" className="relative z-10" initialFocus={cancelButtonRef} onClose={setOpen}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+          </Transition.Child>
 
-export default function Home() {
-  const imgs: number[] = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+          <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
+            <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                enterTo="opacity-100 translate-y-0 sm:scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+              >
+                <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+                  <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                    <div className="sm:flex sm:items-start">
+                      {/* <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                        <ExclamationTriangleIcon className="h-6 w-6 text-red-600" aria-hidden="true" />
+                      </div> */}
+                      <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                        <Dialog.Title as="h3" className="text-xl  font-semibold leading-6 text-gray-900">
+                          ยืนยันการจองห้องพัก
+                        </Dialog.Title>
+                        <div className="mt-2">
+                          <p className="text-lg text-gray-500">
+                            หากต้องการจองห้องพัก จะต้องชำระเงินภายใน 1 วัน
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                    <button
+                      type="button"
+                      className="inline-flex w-full justify-center rounded-md bg-red-900 px-3 py-2 text-md font-semibold text-white shadow-sm hover:bg-red-700 sm:ml-3 sm:w-auto"
+                      onClick={(e) => { setOpen(false) }}
+                    >
+                      จองห้องพัก
+                    </button>
+                    <button
+                      type="button"
+                      className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-md font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+                      onClick={() => setOpen(false)}
+                      ref={cancelButtonRef}
+                    >
+                      ยกเลิก
+                    </button>
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition.Root>
+    )
+  }
+
+  function Cards() {
+    let html = [];
+    for (let i = 0; i < 60; i++) {
+      if (i % 17 == 0 || i % 27 == 0) {
+        html.push(
+          <button key={i} className="rounded overflow-hidden shadow-xl mb-2 bg-red-900 text-white" onClick={(event) => click_reserve(event)}>
+            <div className="px-6 py-4 text-center ">
+              <div className='flex justify-center items-center'><HomeIcon className="h-6 w-6 " /></div>
+              <div className="font-bold text-xl my-3">
+                {101 + i}
+              </div>
+              <p className="text-base">
+                ไม่ว่าง
+              </p>
+            </div>
+          </button>)
+      }
+      else {
+        html.push(
+          <button key={i} className="rounded overflow-hidden shadow-xl mb-2 bg-gray-100 transition hover:duration-300 hover:scale-105 text-gray-800" onClick={(event) => click_reserve(event)}>
+            <div className="px-6 py-4 text-center">
+              <div className='flex justify-center items-center'><HomeIcon className="h-6 w-6 " /></div>
+              <div className="font-bold text-xl my-3">
+                {101 + i}
+              </div>
+              <p className=" text-base">
+                ห้องว่าง
+              </p>
+            </div>
+          </button>)
+      }
+    }
+    return html;
+  }
+
   return (
     <>
+      <Modal />
       <div className="w-100 relative text-center">
         <img
           src="/homeAsset/2.jpg"
@@ -55,10 +151,7 @@ export default function Home() {
           ห้องพักทั้งหมด
         </div>
 
-
-
-        <div className="grid 2xl:grid-cols-6 lg:grid-cols-5 sm:grid-cols-4 sm:gap-7 sm:px-0  gap-y-5 grid-cols-1 px-5">
-          {/* Card */}
+        <div className="grid 2xl:grid-cols-6 lg:grid-cols-5 sm:grid-cols-4 sm:gap-7 gap-5 grid-cols-2 px-5">
 
           <Cards />
 

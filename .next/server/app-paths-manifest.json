@@ -1,0 +1,10 @@
+{
+  "/page": "app/page.js",
+  "/News/page": "app/News/page.js",
+  "/Reserve/page": "app/Reserve/page.js",
+  "/Utilities/page": "app/Utilities/page.js",
+  "/Payment/page": "app/Payment/page.js",
+  "/Map/page": "app/Map/page.js",
+  "/Home/page": "app/Home/page.js",
+  "/Contact/page": "app/Contact/page.js"
+}
