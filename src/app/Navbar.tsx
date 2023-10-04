@@ -1,5 +1,4 @@
 "use client";
-
 import { Disclosure, Menu, Transition, Dialog } from "@headlessui/react";
 import {
   Bars3Icon,
@@ -7,13 +6,22 @@ import {
   XMarkIcon,
   HomeModernIcon,
   UserCircleIcon,
+  ChatBubbleLeftRightIcon,
+  XCircleIcon,
 } from "@heroicons/react/24/outline";
-import { usePathname } from 'next/navigation'
+import {
+  Card,
+  CardBody,
+  CardFooter,
+  Typography,
+  Button,
+  Textarea,
+} from "@material-tailwind/react";
 
-import { HomeIcon } from '@heroicons/react/24/solid'
-import { Fragment, useRef, useState } from 'react'
+import { usePathname } from "next/navigation";
+import { Fragment, useRef, useState } from "react";
 
-
+//const [chat_text, setChatText] = useState([""]);
 const navigation = [
   { name: "หน้าหลัก", href: "/Home", current: true },
   { name: "จองห้อง", href: "/Reserve", current: false },
@@ -24,20 +32,68 @@ const navigation = [
   { name: "ติดต่อเรา", href: "/Contact", current: false },
 ];
 
-
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function Example() {
   const pathname = usePathname();
-  const [open, setOpen] = useState(false)
-  const cancelButtonRef = useRef(null)
+  const [open, setOpen] = useState(false);
+  const cancelButtonRef = useRef(null);
+
+  const [chat, setChat] = useState(false);
+
+  const ChatBox = () => {
+    return (
+      <div className="relative">
+        <button
+          className="fixed bottom-5 right-5  text-gray-900 bg-gray-200 p-4 hover:scale-110 hover:duration-300 rounded-full"
+          onClick={() => setChat(true)}
+        >
+          <ChatBubbleLeftRightIcon className="h-10 w-10" aria-hidden="true" />
+        </button>
+      </div>
+    );
+  };
+
+  const ChatPop = () => {
+    return (
+      <div className="relative">
+        <div className="fixed bottom-5 right-5 z-50 text-gray-900 ">
+          <Card className="w-96 shadow-sm border-gray-200 border-2">
+            <CardBody className="">
+              <div className="grid grid-cols-2 gap-4 ">
+                <Typography variant="h5" color="blue-gray" className="mb-2">
+                  Chat Box
+                </Typography>
+                <button
+                  className="flex justify-end"
+                  onClick={() => setChat(false)}
+                >
+                  <XCircleIcon className="h-7 w-7" aria-hidden="true" />
+                </button>
+              </div>
+            </CardBody>
+            <CardFooter className="pt-0">
+              <div className="">
+                <Textarea label="input text" />
+              </div>
+            </CardFooter>
+          </Card>
+        </div>
+      </div>
+    );
+  };
 
   const Modal = () => {
     return (
       <Transition.Root show={open} as={Fragment}>
-        <Dialog as="div" className="relative z-10" initialFocus={cancelButtonRef} onClose={setOpen}>
+        <Dialog
+          as="div"
+          className="relative z-10"
+          initialFocus={cancelButtonRef}
+          onClose={setOpen}
+        >
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -68,12 +124,16 @@ export default function Example() {
                         <ExclamationTriangleIcon className="h-6 w-6 text-red-600" aria-hidden="true" />
                       </div> */}
                       <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                        <Dialog.Title as="h3" className="text-xl  font-semibold leading-6 text-gray-900">
+                        <Dialog.Title
+                          as="h3"
+                          className="text-xl  font-semibold leading-6 text-gray-900"
+                        >
                           การแจ้งเตือน
                         </Dialog.Title>
                         <div className="mt-2">
                           <p className="text-lg text-gray-500">
-                            ขอแจ้งผู้พักอาศัยทุกท่านเรื่องการฉีดพ่นยุง <br />ในวันที่ 20 ตุลาคม 2566 !!!
+                            ขอแจ้งผู้พักอาศัยทุกท่านเรื่องการฉีดพ่นยุง <br />
+                            ในวันที่ 20 ตุลาคม 2566 !!!
                           </p>
                         </div>
                       </div>
@@ -86,7 +146,7 @@ export default function Example() {
                       onClick={() => setOpen(false)}
                       ref={cancelButtonRef}
                     >
-                      ยกเลิก
+                      ปิด
                     </button>
                   </div>
                 </Dialog.Panel>
@@ -95,12 +155,14 @@ export default function Example() {
           </div>
         </Dialog>
       </Transition.Root>
-    )
-  }
+    );
+  };
   return (
     <Disclosure as="nav" className="bg-gray-900">
       {({ open }) => (
         <>
+          {chat ? <ChatPop /> : ""}
+          <ChatBox />
           <Modal />
           <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
             <div className="relative flex h-16 items-center justify-between">
@@ -130,7 +192,8 @@ export default function Example() {
                         key={item.name}
                         href={item.href}
                         className={classNames(
-                          item.href == pathname || (pathname == "/" && item.href == "/Home")
+                          item.href == pathname ||
+                            (pathname == "/" && item.href == "/Home")
                             ? " text-white bg-gray-800"
                             : "text-gray-300 hover:bg-gray-700 hover:text-white",
                           "rounded-md px-3 py-2 text-md font-medium"

@@ -1,38 +1,55 @@
-'use client'
-import { HomeIcon, ExclamationTriangleIcon } from '@heroicons/react/24/solid'
-import { Fragment, useRef, useState, useCallback, MouseEventHandler } from 'react'
-import { Dialog, Transition } from '@headlessui/react'
+"use client";
+import { HomeIcon, ExclamationTriangleIcon } from "@heroicons/react/24/solid";
+import {
+  Fragment,
+  useRef,
+  useState,
+  useCallback,
+  MouseEventHandler,
+  useEffect,
+} from "react";
+import { Dialog, Transition } from "@headlessui/react";
 
 export default function Reserve() {
   const imgs: number[] = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 
-  const [open, setOpen] = useState(false)
-  const cancelButtonRef = useRef(null)
+  const [open, setOpen] = useState(false);
+  const [id_nows, setId] = useState("");
+  const [id_list, setList] = useState([""]);
+  const cancelButtonRef = useRef(null);
+
+  useEffect(() => { }, [id_list]);
 
   const click_reserve = (event: React.MouseEvent<HTMLButtonElement>) => {
     setOpen(true);
+    setId(event.currentTarget.id);
+  };
 
-    event.currentTarget.classList.toggle('transition');
-    event.currentTarget.classList.toggle('hover:duration-300');
-    event.currentTarget.classList.toggle('hover:scale-105');
-    event.currentTarget.classList.toggle('bg-gray-100');
-    event.currentTarget.classList.toggle('text-gray-800');
+  const confirm = () => {
+    id_list.push(id_nows);
+    id_list.forEach((id) => {
+      var ele = document.getElementById(id);
+      ele?.classList.toggle("transition");
+      ele?.classList.toggle("hover:duration-300");
+      ele?.classList.toggle("hover:scale-105");
+      ele?.classList.toggle("bg-gray-100");
+      ele?.classList.toggle("text-gray-800");
 
-    event.currentTarget.classList.toggle('bg-red-900');
-    event.currentTarget.classList.toggle('text-white');
-
-    let tex: string = "ไม่ว่าง";
-    let t: HTMLParagraphElement | null = event.currentTarget.querySelector('p');
-    t?.innerText(tex);
-    //console.log(event.currentTarget) 
-
-
-  }
+      ele?.classList.toggle("bg-red-900");
+      ele?.classList.toggle("text-white");
+    });
+    setOpen(false);
+  };
 
   const Modal = () => {
     return (
       <Transition.Root show={open} as={Fragment}>
-        <Dialog as="div" className="relative z-10" initialFocus={cancelButtonRef} onClose={setOpen}>
+        <Dialog
+          as="div"
+          className="relative z-10"
+          initialFocus={cancelButtonRef}
+          onClose={setOpen}
+        >
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -63,7 +80,10 @@ export default function Reserve() {
                         <ExclamationTriangleIcon className="h-6 w-6 text-red-600" aria-hidden="true" />
                       </div> */}
                       <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                        <Dialog.Title as="h3" className="text-xl  font-semibold leading-6 text-gray-900">
+                        <Dialog.Title
+                          as="h3"
+                          className="text-xl  font-semibold leading-6 text-gray-900"
+                        >
                           ยืนยันการจองห้องพัก
                         </Dialog.Title>
                         <div className="mt-2">
@@ -78,7 +98,9 @@ export default function Reserve() {
                     <button
                       type="button"
                       className="inline-flex w-full justify-center rounded-md bg-red-900 px-3 py-2 text-md font-semibold text-white shadow-sm hover:bg-red-700 sm:ml-3 sm:w-auto"
-                      onClick={(e) => { setOpen(false) }}
+                      onClick={(e) => {
+                        confirm();
+                      }}
                     >
                       จองห้องพัก
                     </button>
@@ -97,65 +119,71 @@ export default function Reserve() {
           </div>
         </Dialog>
       </Transition.Root>
-    )
-  }
+    );
+  };
 
-  function Cards() {
-    let html = [];
+  const Cards = () => {
+    let html: JSX.Element[] = [];
     for (let i = 0; i < 60; i++) {
-      if (i % 17 == 0 || i % 27 == 0) {
+      if (i % 17 == 0 || i % 27 == 0 || id_list.includes("card" + i)) {
         html.push(
-          <button key={i} className="rounded overflow-hidden shadow-xl mb-2 bg-red-900 text-white" onClick={(event) => click_reserve(event)}>
+          <button
+            id={"card" + i}
+            key={i}
+            className="rounded overflow-hidden shadow-xl mb-2 bg-red-900 text-white"
+            onClick={(event) => click_reserve(event)}
+          >
             <div className="px-6 py-4 text-center ">
-              <div className='flex justify-center items-center'><HomeIcon className="h-6 w-6 " /></div>
-              <div className="font-bold text-xl my-3">
-                {101 + i}
+              <div className="flex justify-center items-center">
+                <HomeIcon className="h-6 w-6 " />
               </div>
-              <p className="text-base">
+              <div className="font-bold text-xl my-3">{101 + i}</div>
+              <p id={"card" + i + "p"} className="text-base">
                 ไม่ว่าง
               </p>
             </div>
-          </button>)
-      }
-      else {
+          </button>
+        );
+      } else {
         html.push(
-          <button key={i} className="rounded overflow-hidden shadow-xl mb-2 bg-gray-100 transition hover:duration-300 hover:scale-105 text-gray-800" onClick={(event) => click_reserve(event)}>
+          <button
+            id={"card" + i}
+            key={i}
+            className="rounded overflow-hidden shadow-xl mb-2 bg-gray-100 transition hover:duration-300 hover:scale-105 text-gray-800"
+            onClick={(event) => click_reserve(event)}
+          >
             <div className="px-6 py-4 text-center">
-              <div className='flex justify-center items-center'><HomeIcon className="h-6 w-6 " /></div>
-              <div className="font-bold text-xl my-3">
-                {101 + i}
+              <div className="flex justify-center items-center">
+                <HomeIcon className="h-6 w-6 " />
               </div>
-              <p className=" text-base">
+              <div className="font-bold text-xl my-3">{101 + i}</div>
+              <p id={"card" + i + "p"} className=" text-base">
                 ห้องว่าง
               </p>
             </div>
-          </button>)
+          </button>
+        );
       }
     }
     return html;
-  }
+  };
 
   return (
     <>
       <Modal />
       <div className="w-100 relative text-center">
-        <img
-          src="/homeAsset/2.jpg"
-          className="object-cover h-96 w-screen "
-        />
+        <img src="/homeAsset/2.jpg" className="object-cover h-96 w-screen " />
         <div className="h-full w-full top-1/2 absolute -translate-y-1/2 p-8 bg-gradient-to-r from-gray-900 via-gray-900/70 to-gray-900/0 text-center ">
-          <div className="text-5xl font-bold text-white mt-36">จองห้องพัก</div></div>
+          <div className="text-5xl font-bold text-white mt-36">จองห้องพัก</div>
+        </div>
       </div>
       <div className="container mx-auto mb-44">
-
         <div className="text-3xl font-bold my-10 text-black text-center sm:text-left">
           ห้องพักทั้งหมด
         </div>
 
         <div className="grid 2xl:grid-cols-6 lg:grid-cols-5 sm:grid-cols-4 sm:gap-7 gap-5 grid-cols-2 px-5">
-
           <Cards />
-
         </div>
       </div>
     </>
